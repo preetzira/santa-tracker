@@ -31,6 +31,36 @@ const IndexPage = () => {
       console.log(`Failed to find Santa!: ${e}`);
     }
     console.log("routeJson", routeJson);
+    const { destinations = [] } = routeJson || {};
+    const destinationsVisited = destinations.filter(({arrival}) => arrival < Date.now());
+    const destinationsWithPresents = destinationsVisited.filter(({presentsDelivered}) => presentsDelivered > 0);
+    const lastKnownDestination = destinationsWithPresents[destinationsWithPresents.length - 1]
+    if ( destinationsWithPresents.length === 0 ) {
+      // Create a Leaflet Market instance using Santa's LatLng location
+      const center = new L.LatLng( 0, 0 );
+      const noSanta = L.marker( center, {
+        icon: L.divIcon({
+          className: 'icon',
+          html: `<div class="icon-santa">🎅</div>`,
+          iconSize: 50
+        })
+      });
+      noSanta.addTo( leafletElement );
+      noSanta.bindPopup( `Santa's still at the North Pole!` );
+      noSanta.openPopup();
+      return;
+    }
+    const santaLocation = new L.LatLng( lastKnownDestination.location.lat, lastKnownDestination.location.lng );
+
+    const santaMarker = L.marker( santaLocation, {
+      icon: L.divIcon({
+        className: 'icon',
+        html: `<div class='icon-santa'>🎅</div>`,
+        iconSize: 50
+      })
+    });
+
+    santaMarker.addTo(leafletElement);
   }
 
   const mapSettings = {
