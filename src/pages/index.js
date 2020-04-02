@@ -22,7 +22,15 @@ const IndexPage = () => {
    */
 
   async function mapEffect({ leafletElement } = {}) {
-    
+    if ( !leafletElement ) return;
+    let route, routeJson;
+    try {
+      route = await fetch('https://firebasestorage.googleapis.com/v0/b/santa-tracker-firebase.appspot.com/o/route%2Fsanta_en.json?alt=media&2018b');
+      routeJson = await route.json();
+    } catch(e) {
+      console.log(`Failed to find Santa!: ${e}`);
+    }
+    console.log("routeJson", routeJson);
   }
 
   const mapSettings = {
@@ -37,17 +45,7 @@ const IndexPage = () => {
       <Helmet>
         <title>Home Page</title>
       </Helmet>
-
       <Map {...mapSettings} />
-
-      <Container type="content" className="text-center home-start">
-        <h2>Still Getting Started?</h2>
-        <p>Run the following in your terminal!</p>
-        <pre>
-          <code>gatsby new [directory] https://github.com/colbyfayock/gatsby-starter-leaflet</code>
-        </pre>
-        <p className="note">Note: Gatsby CLI required globally for the above command</p>
-      </Container>
     </Layout>
   );
 };
