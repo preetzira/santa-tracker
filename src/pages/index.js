@@ -12,7 +12,7 @@ const LOCATION = {
   lng: -77.0369
 };
 const CENTER = [LOCATION.lat, LOCATION.lng];
-const DEFAULT_ZOOM = 2;
+const DEFAULT_ZOOM = 1;
 
 const IndexPage = () => {
   /**
@@ -69,7 +69,7 @@ const IndexPage = () => {
     });
         
     const santasRoute = new L.Polyline( santasRouteLatLngs, {
-      weight: 4,
+      weight: 2.5,
       color: 'red',
       opacity: 1,
       fillColor: 'red',
