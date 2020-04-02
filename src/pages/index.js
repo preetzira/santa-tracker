@@ -3,7 +3,6 @@ import Helmet from 'react-helmet';
 import L from 'leaflet';
 
 import Layout from 'components/Layout';
-import Container from 'components/Container';
 import Map from 'components/Map';
 
 
@@ -62,17 +61,76 @@ const IndexPage = () => {
     
     santaMarker.addTo(leafletElement);
     
-    const santasRouteLatLngs = destinationsWithPresents.map(destination => {
+    const santasRouteLatLngs = destinations.map(destination => {
       const { location } = destination;
       const { lat, lng } = location;
       return new L.LatLng( lat, lng );
     });
+
+    const stopsGeoJson = geoJsonPointsFromDestinations(destinationsWithPresents)
+    
+    function geoJsonPointsFromDestinations( desintations = []) {
+      const features = desintations.map(( destination = {}) => {
+        const { location = {} } = destination;
+        const { lat, lng } = location;
+        const coordinates = [lng, lat];
+        return {
+          type: 'Feature',
+          properties: {
+            ...destination
+          },
+          geometry: {
+            type: 'Point',
+            coordinates
+          }
+        };
+      });
+      return {
+        features
+      };
+    }
+
+    const giftIcon = L.divIcon({
+      className: 'icon',
+      html: `<div class='icon-dest'>🎁</div>`,
+      iconSize: 30
+    })
+
+    function deliveryPointToLayer( feature = {}, latlng ) {
+      const { properties = {} } = feature;
+      const { presentsDelivered = 0, city, region } = properties;
+      const quote = `
+        <div class="text-center">
+          <strong>${city}, ${region}</strong>
+          <br /><hr />
+          ${presentsDelivered.toLocaleString('en-IN').replace('.00','')} 🎁
+        </div>
+      `;
+      const layer = L.marker( latlng, {
+        icon: giftIcon,
+        riseOnHover: true
+      }).bindPopup( quote );
+      return layer;
+    }
+
+    const santaStops = new L.geoJson( stopsGeoJson, { pointToLayer: deliveryPointToLayer
+    });
+
+    // const destinationsMarker = L.marker( dest, {
+    //   icon: L.divIcon({
+    //     className: 'icon',
+    //     html: `<div class='icon-dest'>🎁</div>`,
+    //     iconSize: 30
+    //   })
+    // });
+    
+    santaStops.addTo(leafletElement);
         
     const santasRoute = new L.Polyline( santasRouteLatLngs, {
       weight: 2.5,
-      color: 'red',
+      color: '#fc4a1a',
       opacity: 1,
-      fillColor: 'red',
+      fillColor: '#fc4a1a',
       fillOpacity: 0.5
     });
     
