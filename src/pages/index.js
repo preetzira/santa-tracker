@@ -59,8 +59,24 @@ const IndexPage = () => {
         iconSize: 50
       })
     });
-
+    
     santaMarker.addTo(leafletElement);
+    
+    const santasRouteLatLngs = destinationsWithPresents.map(destination => {
+      const { location } = destination;
+      const { lat, lng } = location;
+      return new L.LatLng( lat, lng );
+    });
+        
+    const santasRoute = new L.Polyline( santasRouteLatLngs, {
+      weight: 4,
+      color: 'red',
+      opacity: 1,
+      fillColor: 'red',
+      fillOpacity: 0.5
+    });
+    
+    santasRoute.addTo(leafletElement);
   }
 
   const mapSettings = {
