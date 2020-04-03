@@ -1,7 +1,3 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/c90a3d2c-8b7f-45fd-b011-9ce8996b780a/deploy-status)](https://app.netlify.com/sites/track-santa/deploys)
-
-Click here for [Demo](https://track-santa.netlify.com)
-
 # 🍃 Gatsby Leaflet Starter
 
 Jumpstart your next Gatsby mapping project with Leaflet!
