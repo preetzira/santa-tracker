@@ -113,7 +113,8 @@ const IndexPage = () => {
       return layer;
     }
 
-    const santaStops = new L.geoJson( stopsGeoJson, { pointToLayer: deliveryPointToLayer
+    const santaStops = new L.geoJson( stopsGeoJson, { 
+      pointToLayer: deliveryPointToLayer
     });
 
     // const destinationsMarker = L.marker( dest, {
